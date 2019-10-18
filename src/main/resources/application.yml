@@ -1,12 +1,18 @@
 server:
-  port: 8080
+  port: 8888
 spring:
   datasource:
     druid:
-      url: jdbc:mysql://localhost:3306/win_cloud?useUicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8
+      url: jdbc:mysql://localhost:3306/test?useUicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
       username: root
-      password: Xiao.1124816
+      password: 123456
       driver-class-name: com.mysql.cj.jdbc.Driver
-shiro:
-  loginUrl: /login
+  thymeleaf:
+    cache: false
 
+shiro:
+  loginUrl: /sing_in
+#logging:
+#  config: classpath:logback.xml
+#  level:
+#    com.example.wincloud: debug

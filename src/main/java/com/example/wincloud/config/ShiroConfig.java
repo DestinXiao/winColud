@@ -1,9 +1,9 @@
 package com.example.wincloud.config;
 
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import com.example.wincloud.dao.UserMapper;
+import com.example.wincloud.pojo.User;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.realm.Realm;
@@ -11,19 +11,37 @@ import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
 import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+@Slf4j
 @Configuration
 public class ShiroConfig {
+
+    @Autowired
+    UserMapper userMapper;
 
     @Bean
     public Realm realm() {
         return new AuthorizingRealm() {
 
+
             @Override
             protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-                return new SimpleAuthenticationInfo("123", "123", getName());
+                UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
+                String username = token.getUsername();
+
+                log.debug("数据库查询用户[{}]", username);
+
+                User user = userMapper.getUserByUsername(username);
+                if (user == null) return null;
+
+                System.out.println("-- " + user.getPassword() + " " + String.valueOf(token.getPassword()));
+                if (!user.getPassword().equals(String.valueOf(token.getPassword()))) {
+                    throw new IncorrectCredentialsException();
+                }
+                return new SimpleAuthenticationInfo(user.getUsername(), user.getPassword(), user.getUsername());
             }
 
             @Override
@@ -43,14 +61,9 @@ public class ShiroConfig {
     @Bean
     public ShiroFilterChainDefinition shiroFilterChainDefinition() {
         DefaultShiroFilterChainDefinition chainDefinition = new DefaultShiroFilterChainDefinition();
+        chainDefinition.addPathDefinition("/login", "anon");
         chainDefinition.addPathDefinition("/**", "authc");
         return chainDefinition;
     }
 
-//    @Bean
-//    public ShiroFilterFactoryBean shiroFilterFactoryBean() {
-//
-//        ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();
-//        bean.setLoginUrl("login");
-//    }
 }

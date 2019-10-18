@@ -2,9 +2,86 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>Title</title>
+
+    <style>
+        .progressBar {
+            width: 10rem;
+            height: .8rem;
+            border: 1px solid #ccc;
+            font-size: .4rem;
+            line-height: .8rem;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .progressBar-success {
+            height: .8rem;
+
+            background: red;
+            width: 3rem;
+        }
+
+        #rate {
+            position: relative;
+            top: -.8rem;
+        }
+    </style>
 </head>
 <body>
-$END$
+    <h2>Index</h2>
+
+    <form>
+        <input type="file" name="file" id="file">
+        <input type="button" value="submit" id="submit">
+    </form>
+
+    <div class="progressBar" id="progressBar">
+        <div class="progressBar-success" ></div>
+        <span id="rate">127KB/S</span>
+    </div>
+    <div class="progressBar" id="progressBar">
+        <div class="progressBar-success" ></div>
+        <span id="rate">127KB/S</span>
+    </div>
+
+    <script>
+        var baseUrl = "http://127.0.0.1:8888";
+        var submit_btn = document.querySelector("#submit");
+
+        submit_btn.addEventListener("click", function (evt) {
+            var file = document.querySelector("#file");
+            var formData = new FormData();
+            formData.append("file", file.files[0]);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", baseUrl + "/upload", true);
+            var loaded;
+            var timed;
+
+            xhr.upload.onprogress = progress;
+            xhr.upload.onloadstart = function (ev) {
+                timed = new Date().getTime();
+                loaded = 0;
+            }
+            xhr.send(formData);
+
+        });
+
+
+        function progress(ev) {
+
+
+        }
+
+        function uploadComplete() {
+            console.log("文件上传成功");
+        }
+
+        function uploadFail() {
+            console.log("文件上传失败");
+        }
+
+    </script>
 </body>
 </html>
