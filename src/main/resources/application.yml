@@ -3,16 +3,29 @@ server:
 spring:
   datasource:
     druid:
-      url: jdbc:mysql://localhost:3306/test?useUicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+      url: jdbc:mysql://192.168.189.130:3306/win_cloud?useUicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8
       username: root
-      password: 123456
+      password: Xiao.1124816
       driver-class-name: com.mysql.cj.jdbc.Driver
+
   thymeleaf:
     cache: false
-
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
+  redis:
+    database: 0
+    host: 192.168.189.130
+    port: 6379
+    password: 123456
 shiro:
   loginUrl: /sing_in
+
 #logging:
 #  config: classpath:logback.xml
 #  level:
 #    com.example.wincloud: debug
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true

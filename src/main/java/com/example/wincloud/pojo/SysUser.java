@@ -3,15 +3,23 @@ package com.example.wincloud.pojo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import java.io.Serializable;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+@ToString
+public class SysUser implements Serializable {
 
-    private Integer id;
+    private Long id;
     private String username;
     private String password;
-    private Integer state;
+    private String email;
+    private Integer status;
+    private Date createTime;
+    private Date updateTime;
 
 }

@@ -1,32 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-
-    <style>
-        .progressBar {
-            width: 10rem;
-            height: .8rem;
-            border: 1px solid #ccc;
-            font-size: .4rem;
-            line-height: .8rem;
-            text-align: center;
-            margin: 1rem 0;
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
+    <style type="text/css">
+        .icon {
+            width: 3em; height: 3em;
+            vertical-align: -0.15em;
+            fill: currentColor;
+            overflow: hidden;
+            display: inline-block;
         }
 
-        .progressBar-success {
-            height: .8rem;
+        .content {
+            height: 4rem;
+        }
+        .file-list {
+            padding: 0;
+        }
+        .file-item {
+            list-style: none;
+            margin: 0;
+            height: 3rem;
+            display: flex;
 
-            background: red;
-            width: 3rem;
         }
 
-        #rate {
-            position: relative;
-            top: -.8rem;
+        .thumb{
+            margin-right: 1rem;
         }
+        .label {
+            line-height: 3rem;
+        }
+
+        .label .iconfont {
+            font-size: 1.4rem;
+        }
+        .info{
+            line-height: 3rem;
+        }
+
+        .info .title {
+            color: #000;
+            text-decoration: none;
+        }
+
+        .info .title:hover {
+            color: #6aa2fd;
+            text-decoration: underline;
+        }
+
+
     </style>
+    <script src="//at.alicdn.com/t/font_1466864_vxvwzlnneyn.js"></script>
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1466864_vxvwzlnneyn.css">
 </head>
 <body>
     <h2>Index</h2>
@@ -36,52 +64,92 @@
         <input type="button" value="submit" id="submit">
     </form>
 
-    <div class="progressBar" id="progressBar">
-        <div class="progressBar-success" ></div>
-        <span id="rate">127KB/S</span>
-    </div>
-    <div class="progressBar" id="progressBar">
-        <div class="progressBar-success" ></div>
-        <span id="rate">127KB/S</span>
-    </div>
+    <progress class="progressBar" id="progressBar" max="200" value="0">
+<!--        <div class="progressBar-success" ></div>-->
 
-    <script>
-        var baseUrl = "http://127.0.0.1:8888";
-        var submit_btn = document.querySelector("#submit");
+    </progress>
+     <span id="rate">127KB/S</span>
 
-        submit_btn.addEventListener("click", function (evt) {
-            var file = document.querySelector("#file");
-            var formData = new FormData();
-            formData.append("file", file.files[0]);
-
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", baseUrl + "/upload", true);
-            var loaded;
-            var timed;
-
-            xhr.upload.onprogress = progress;
-            xhr.upload.onloadstart = function (ev) {
-                timed = new Date().getTime();
-                loaded = 0;
-            }
-            xhr.send(formData);
-
-        });
+    <div class="tool-wrapper"><a href="javascript:void(0);" id="add">+</a></div>
+<!--    <div class="content">-->
 
 
-        function progress(ev) {
+<!--        <ul class="file-list" >-->
+
+<!--            <li class="file-item" th:each="file:${fileList}">-->
+<!--                <div class="label">-->
+<!--                    <i class="iconfont icon-check-box-outline-bl"></i>-->
+<!--                </div>-->
+<!--                <div class="thumb">-->
+<!--                    <svg class="icon" aria-hidden="true">-->
+<!--                        <use xlink:href="#icon-weibiaoti-_huabanfuben"></use>-->
+<!--                    </svg>-->
+<!--                </div>-->
+<!--                <div class="info">-->
+<!--                    <a class="title" href="javascript:void(0);" th:text="${file.fileName} + asdds"></a>-->
+<!--                </div>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </div>-->
 
 
-        }
 
-        function uploadComplete() {
-            console.log("文件上传成功");
-        }
+<!--    <script>-->
 
-        function uploadFail() {
-            console.log("文件上传失败");
-        }
+<!--        var baseUrl = "http://127.0.0.1:8888";-->
+<!--        var submit_btn = document.querySelector("#submit");-->
+<!--        var progressBar = document.querySelector("#progressBar");-->
+<!--        var startTime;-->
+<!--        submit_btn.addEventListener("click", function (evt) {-->
+<!--            var file = document.querySelector("#file");-->
+<!--            var formData = new FormData();-->
+<!--            formData.append("path", "/abc");-->
+<!--            formData.append("fileName", "file1");-->
+<!--            formData.append("fileTypeId", "0");-->
+<!--            formData.append("file", file.files[0]);-->
 
-    </script>
+<!--            var xhr = new XMLHttpRequest();-->
+<!--            xhr.open("POST", baseUrl + "/upload", true);-->
+<!--            var loaded;-->
+
+
+<!--            xhr.upload.onprogress = progress;-->
+<!--            xhr.upload.onloadstart = function (event) {-->
+<!--                startTime = new Date().getTime();-->
+<!--                loaded = 0;-->
+<!--            };-->
+<!--            xhr.upload.onloadend = uploadComplete;-->
+<!--            xhr.send(formData);-->
+
+<!--        });-->
+
+
+<!--        function progress(event) {-->
+<!--            var rate = document.querySelector("#rate");-->
+<!--            var currentTime = new Date().getTime();-->
+<!--            console.log(new Date().getTime());-->
+<!--            progressBar.max = event.total;-->
+<!--            progressBar.value = event.loaded;-->
+<!--            var time = (currentTime - startTime) / 1000;-->
+<!--            var speed = event.loaded / 1000 / time;-->
+<!--            if(speed > 1024) {-->
+<!--                speed /= 1024;-->
+<!--                rate.innerHTML = parseInt(speed * 10) / 10 + "MB/s";-->
+<!--            } else {-->
+<!--                rate.innerHTML = parseInt(speed) + "KB/s";-->
+<!--            }-->
+
+<!--            console.log(event.total + " " + event.loaded);-->
+<!--        }-->
+
+<!--        function uploadComplete() {-->
+<!--            console.log("文件上传成功，用时" + (new Date().getTime() - startTime) / 1000 + "s");-->
+<!--        }-->
+
+<!--        function uploadFail() {-->
+<!--            console.log("文件上传失败");-->
+<!--        }-->
+
+<!--    </script>-->
 </body>
 </html>
